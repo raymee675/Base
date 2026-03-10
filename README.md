@@ -1,96 +1,83 @@
 # Base Project
-Unity での開発に必要な初期設定や便利なアセットを追加したベースプロジェクトです。  
-対応バージョン：**Unity 6000.3.9f1**
+Unity での開発で必要な初期設定や便利なアセットを追加したベースプロジェクトです。  
+対応バージョン Unity : 6000.3.9f1
 
 ---
 
 ## 使い方
 
-### 1. プロジェクトをコピーする
-GitHub の **Fork** 機能を使って、自分のアカウントにコピーしてください。  
-GitHub ページ右上の **Code → Fork** を選択します。
+1. Fork してコピーして利用してください。  
+2. GitHub のページから Code -> Fork を選択してください。
 
-### 2. ローカルにクローンする
-GitHub Desktop などを使って、Fork したリポジトリをローカルにクローンします。
+3. Unity で開く  
+対応バージョンは Unity 6000.3.9f1 です。  
+GitHub DeskTop 等でローカルにクローンして開いてください。
 
-### 3. Unity で開く
-Unity **6000.3.9f1** でプロジェクトを開いてください。
+4. 実行してみる  
+画面上部中央の実行ボタンを押して、Console の出力を確認してください。  
+"Hello World Raymee675!" と表示されると思います。
 
-### 4. 実行して動作確認
-Unity 上部中央の再生ボタンを押し、Console に  
-`Hello World Raymee675!`  
-と表示されることを確認します。
-
-### 5. 変更要素を確認する
-`Assets > Scenes > Base.unity` を開き、以下の「変更要素」を確認してください。  
-確認後、自分の開発を開始できます。
+5. 変更要素を確認する  
+Asset > Scenes > Base.unity を開いて、下記の変更要素を確認してください。  
+確認出来たら、自分の開発を始めましょう。
 
 ---
 
 ## 変更要素
 
-### GameManager 配下の構成
-画面左のヒエラルキーから **GameManager** を選択し、子オブジェクトを確認してください。
+画面左のヒエラルキーから GameManager というオブジェクトを選択し、子オブジェクトを開いて見てください。
 
----
+- **GManager（GameManager）**  
+  static で public なシングルトンクラスです。  
+  その名の通り、ゲーム全体の管理を担うクラスです。
 
-### GManager（GameManager）
-- static かつ public なシングルトンクラス  
-- ゲーム全体の管理を担当する中心的なクラス
+- **InputManager**  
+  GManager オブジェクトにアタッチされている、ユーザーのインプットを管理するクラスです。  
+  管理をしやすくするため、インプットの処理はこのクラスで完結させてください。
 
----
+- **VManager(VolumeManager)**  
+  PostProcess の Volume を操作するためのオブジェクトです。  
+  Post Process とは Unity のレンダリングを調整するフィルターのことで  
+  これをうまく適用すればビジュアルが劇的に向上します。  
+  Volume の値は Script から実行中に変更することも可能です。
 
-### InputManager
-- GManager にアタッチされている入力管理クラス  
-- ユーザー入力に関する処理はこのクラスに集約してください
+- **CManager(CameraManager) と Back Camera オブジェクト**  
+  Cmanager配下に 4 つの Camera があり、それとは別に GameManager 配下に BackCamera が存在します。
 
----
+  + **MainCamera**  
+    デフォルトのゲームオブジェクトを描画します。  
+    また FreezeAspectRate.cs (後述) がアタッチされています。
 
-### VManager（VolumeManager）
-- PostProcess の Volume を操作するためのオブジェクト  
-- Post Process は Unity のレンダリングを調整するフィルター  
-- Script から実行中に Volume の値を変更可能
+  + **UICamera**  
+    UI 専用のカメラです。
 
----
+  + **FrontCamera**  
+    Frontage レイヤーにあるオブジェクトのみを描画します。
 
-### CManager（CameraManager）と Back Camera
-CManager 配下に 4 つのカメラ、GameManager 配下に BackCamera が存在します。
-
-- **MainCamera**  
-  - デフォルトのゲームオブジェクトを描画  
-  - `FreezeAspectRate.cs` がアタッチされています  
-
-- **UICamera**  
-  - UI 専用のカメラ  
-
-- **FrontCamera**  
-  - Frontage レイヤーのオブジェクトのみ描画  
-
-- **BackImageCamera**  
-  - BackImage レイヤーのオブジェクトを描画  
-  - 上記 3 カメラのベースカメラ  
-  - 描画順：UI → Frontage → Main → BackImage  
+  + **BackImageCamera**  
+    BackImage レイヤーにあるオブジェクトのみを描画する他、上の３カメラのベースカメラとなり  
+    UI > Frontage > Main > BackImage の順で描画します。
 
 - **BackCamera**  
-  - FreezeAspectRate 用のレターボックス描画専用カメラ
+  下の FreezeAspectRate の為に、レターボックスを描画する専用のカメラです。
+
+- **Letter Box**  
+  下の FreezeAspectRate 用のレターボックスです。任意の画像を表示できます。
+
+- **FreezeAspectRate.cs**  
+  異なる解像度モニターでもアスペクトが一定で動くようにする Script です。  
+  Aspect に 設定したアスペクト比を保ち続けます。  
+  また Sup,Sdown,Sright,Sleft に任意の画像を適用すると、実行中にその画像がレターボックスとして表示されます。
+
+- **UI Canvas**  
+  UI を表示するための 親キャンバスです。  
+  この子オブジェクトの Panel オブジェクトを配置することで、UI を規則正しく配置します。
 
 ---
-
-### Letter Box
-- FreezeAspectRate 用のレターボックス  
-- 任意の画像を設定可能
-
----
-
-### FreezeAspectRate.cs
-- 異なる解像度でもアスペクト比を一定に保つスクリプト  
-- `Aspect` に設定した比率を維持  
-- `Sup, Sdown, Sright, Sleft` に画像を設定すると、実行中にレターボックスとして表示されます
+## 困ったことがあったら
+Raymee675 に連絡してください。
+Twitter: @Raymee675 
 
 ---
-
-### UI Canvas
-- UI を表示するための親キャンバス  
-- 子オブジェクトの Panel を配置することで UI を規則正しく配置できます
-
----
+## 困ったことがなかったら
+お楽しみください。
