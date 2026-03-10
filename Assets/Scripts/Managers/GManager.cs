@@ -22,6 +22,7 @@ public class GManager : MonoBehaviour
     //これにより、time 変数は private であるにもかかわらず、Unity エディタのインスペクターで値を設定できるようになります。
     //private 変数は、クラスの外部からアクセスできない変数です。これにより、time 変数は GManager クラスの内部でのみアクセスできます。
     [SerializeField] private float time = 0;
+    [SerializeField] private bool logOn = false;
 
     public void Awake()
     {
@@ -58,10 +59,13 @@ public class GManager : MonoBehaviour
     public void Update()
     {
         //Time は Unity の組み込みクラスで、ゲームの時間に関する情報を提供します。deltaTime は、前のフレームから現在のフレームまでの時間を秒単位返します。
-        
+
         float dt = Time.deltaTime;
         time += dt;
-        Debug.Log($"Update は毎フレーム呼ばれる. 現在の時間は {time} 秒");
+        if (logOn)
+        {
+            Debug.Log($"Update は毎フレーム呼ばれる. 現在の時間は {time} 秒");
+        }
 
         //InputManager の UpdateInput 関数を呼び出して、入力を検出します。
         if (IManager != null)
@@ -70,7 +74,7 @@ public class GManager : MonoBehaviour
         }
 
         //PlayerController の UpdatePlayer 関数を呼び出して、プレイヤーの状態を更新します。
-        if(Player != null)
+        if (Player != null)
         {
             Player.UpdatePlayer(dt);
         }
@@ -79,7 +83,10 @@ public class GManager : MonoBehaviour
     //LateUpdate は Update が実行された後に、毎フレーム呼ばれる
     public void LateUpdate()
     {
-        
+        if (logOn)
+        {
+            Debug.Log("LateUpdate は Update の後に毎フレーム呼ばれる");
+        }
     }
 }
 
